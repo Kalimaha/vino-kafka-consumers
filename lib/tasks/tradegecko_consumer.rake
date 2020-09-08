@@ -1,9 +1,7 @@
 namespace :kafka do
-  task :consume do
+  task :consume_tradegecko do
     require "kafka"
     require "#{Rails.root}/app/workers/trade_gecko_worker"
-
-    puts "Hello from the consumer"
 
     tmp_ca_file = Tempfile.new("ca_certs")
     tmp_ca_file.write(ENV.fetch("KAFKA_TRUSTED_CERT"))
@@ -16,10 +14,11 @@ namespace :kafka do
       ssl_client_cert_key: ENV.fetch("KAFKA_CLIENT_CERT_KEY"),
       ssl_verify_hostname: false,
     )
-    consumer = kafka.consumer(group_id: "#{ENV["KAFKA_PREFIX"]}tradegecko_consumer_group")
-    consumer.subscribe("#{ENV["KAFKA_PREFIX"]}tradegecko")
+    
+    tradegecko_consumer = kafka.consumer(group_id: "#{ENV["KAFKA_PREFIX"]}tradegecko_consumer_group")
+    tradegecko_consumer.subscribe("#{ENV["KAFKA_PREFIX"]}tradegecko")
 
-    trap("TERM") { consumer.stop }
+    trap("TERM") { tradegecko_consumer.stop }
 
     kafka.each_message(topic: "#{ENV["KAFKA_PREFIX"]}tradegecko", max_wait_time: 0.5) do |message|
       puts "Message: #{message}"
