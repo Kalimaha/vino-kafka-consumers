@@ -15,12 +15,12 @@ class BigCommerceWorker
       req.headers['X-Auth-Token'] = ENV['BIGCOMMERCE_PASSWORD']
       req.headers['X-Auth-Client'] = ENV['BIGCOMMERCE_USERNAME']
       req.body = {
-        name: data.dig("product_name"),
-        price: data.dig("retail_price"),
+        name: data.dig("value", "product_name"),
+        price: data.dig("value", "retail_price"),
         categories: ["18"],
-        weight: data.dig("weight"),
+        weight: data.dig("value", "weight"),
         type: "physical",
-        inventory_level: data.dig("stock_on_hand")
+        inventory_level: data.dig("value", "stock_on_hand")
       }.to_json
     end
     puts "<== BigCommerce SAYS ==>"
