@@ -7,6 +7,26 @@ class BigCommerceWorker
     puts "<== DATA FROM KAFKA ==>"
     puts data
     puts "<== DATA FROM KAFKA ==>"
+
+    url = "https://api.bigcommerce.com/stores/6zw8cyfm80/v3/catalog/products"
+    resp = Faraday.post(url) do |req|
+      req.headers['Content-Type'] = 'application/json'
+      req.headers['Accept'] = 'application/json'
+      req.headers['X-Auth-Token'] = ENV['BIGCOMMERCE_PASSWORD']
+      req.headers['X-Auth-Client'] = ENV['BIGCOMMERCE_USERNAME']
+      req.body = {
+        name: data.dig("product_name"),
+        price: data.dig("retail_price"),
+        categories: ["18"],
+        weight: data.dig("weight"),
+        type: "physical",
+        inventory_level: data.dig("stock_on_hand")
+      }.to_json
+    end
+    puts "<== BigCommerce SAYS ==>"
+    puts resp.body
+    puts "<== BigCommerce SAYS ==>"
+
     # url = data.dig("value", "resource_url")
     # unless url.nil?
     #   resp = Faraday.get(url) do |req|
