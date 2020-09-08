@@ -18,7 +18,7 @@ class BigCommerceWorker
         name: data.dig("value", "product_name"),
         price: data.dig("value", "retail_price"),
         categories: ["18"],
-        weight: data.dig("value", "weight"),
+        weight: data.dig("value", "weight") || 0.0,
         type: "physical",
         inventory_level: data.dig("value", "stock_on_hand")
       }.to_json
