@@ -5,6 +5,7 @@ class KafkaRepository
   class << self
     def publish_message(message_body)
       topic   = "#{ENV["KAFKA_PREFIX"]}bigcommerce"
+      puts "PUBLISH TO #{topic}"
       message = { "key": SecureRandom.uuid, "value": message_body }
 
       puts "TOPIC: #{topic}"

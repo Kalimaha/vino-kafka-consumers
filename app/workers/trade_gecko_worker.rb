@@ -19,7 +19,8 @@ class TradeGeckoWorker
           "retail_price": variant.dig("retail_price"),
           "sku": variant.dig("sku"),
           "stock_on_hand": variant.dig("stock_on_hand"),
-          "weight": variant.dig("weight")
+          "weight": variant.dig("weight"),
+          "weight_value": variant.dig("weight_value")
         }
         KafkaRepository.publish_message(message)
       end
